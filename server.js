@@ -7,14 +7,8 @@ const bodyParser = require("body-parser");
 const app = express();
 const port = process.env.PORT || 5000;
 
-const corsOptions = {
-  origin: "*", // Allow all origins (only for testing; restrict later in production)
-  methods: ["GET", "POST", "PUT", "DELETE"], // Allow the necessary HTTP methods
-};
-
 // Middleware
-app.use(cors(corsOptions));
-// app.use(cors());
+app.use(cors());
 app.use(bodyParser.json());
 
 // Connect to MongoDB
@@ -33,10 +27,10 @@ const expenseSchema = new mongoose.Schema({
 // Create Expense model
 const Expense = mongoose.model("Expense", expenseSchema);
 
-// GET latest 5 expenses
+// GET latest 3 expenses
 app.get("/api/expenses/latest", async (req, res) => {
   try {
-    const latestExpenses = await Expense.find().sort({ date: -1 }).limit(5);
+    const latestExpenses = await Expense.find().sort({ date: -1 }).limit(3);
     res.json(latestExpenses);
   } catch (error) {
     res.status(500).json({ message: error.message });
